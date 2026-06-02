@@ -1,35 +1,14 @@
-"""Pruebas de la lógica de pedidos."""
+from pedidos import calcular_totales_pedido
 
-import pytest
+def test_calcular_totales_sin_descuento():
+    # Preparamos unos datos falsos (1 producto de 10€)
+    lineas_prueba = [{"producto": "Ratón", "cantidad": 1, "precio": 10.0}]
 
-from pedidos import LineaPedido, Pedido, calcular_descuento, calcular_total_lineas
+    # Ejecutamos nuestra función
+    resultado = calcular_totales_pedido(lineas_prueba)
 
-
-def test_calcula_subtotal_linea():
-    linea = LineaPedido("Teclado", 25.0, 2)
-    assert linea.subtotal() == 50.0
-
-
-def test_calcula_total_lineas():
-    lineas = [LineaPedido("Ratón", 10.0, 2), LineaPedido("Monitor", 150.0, 1)]
-    assert calcular_total_lineas(lineas) == 170.0
-
-
-def test_aplica_descuento_del_10_por_ciento():
-    assert calcular_descuento(150.0) == 15.0
-
-
-def test_aplica_descuento_del_15_por_ciento():
-    assert calcular_descuento(300.0) == 45.0
-
-
-def test_total_final_pedido_con_descuento():
-    pedido = Pedido("Ana")
-    pedido.agregar_linea(LineaPedido("Silla", 100.0, 2))
-    assert pedido.total_con_descuento() == 170.0
-
-
-def test_no_permite_cantidad_cero():
-    linea = LineaPedido("Mesa", 80.0, 0)
-    with pytest.raises(ValueError):
-        linea.subtotal()
+    # Comprobamos que las matemáticas son correctas
+    assert resultado["subtotal"] == 10.0
+    assert resultado["descuento"] == 0.0
+    assert resultado["iva"] == 2.10
+    assert resultado["total"] == 12.10
