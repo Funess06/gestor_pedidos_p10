@@ -1,8 +1,15 @@
 from clientes import clientes
 from utilidades import pedir_numero
 
-pedidos = []
+# --- CONSTANTES AÑADIDAS (Refactorización 1) ---
+IVA = 0.21
+DESCUENTO_GRANDE = 0.10
+DESCUENTO_PEQUENO = 0.05
+UMBRAL_GRANDE = 100
+UMBRAL_PEQUENO = 50
+# -----------------------------------------------
 
+pedidos = []
 
 def menu_pedidos():
     fin = False
@@ -76,10 +83,14 @@ def ver_pedidos():
             total = 0
             for l in p["lineas"]:
                 total = total + l["cantidad"] * l["precio"]
-            if total > 100:
-                total = total - total * 0.10
-            elif total > 50:
-                total = total - total * 0.05
+            
+            # --- USO DE CONSTANTES ---
+            if total > UMBRAL_GRANDE:
+                total = total - total * DESCUENTO_GRANDE
+            elif total > UMBRAL_PEQUENO:
+                total = total - total * DESCUENTO_PEQUENO
+            # -------------------------
+            
             print(str(pos + 1) + ". Cliente: " + p["cliente"]["nombre"] + " | Estado: " + p["estado"] + " | Total: " + str(round(total, 2)) + " €")
             pos = pos + 1
 
@@ -99,14 +110,16 @@ def calcular_total_desde_menu():
     for linea in p["lineas"]:
         suma = suma + linea["cantidad"] * linea["precio"]
 
-    # Reglas de descuento duplicadas a propósito
+    # --- USO DE CONSTANTES ---
     descuento = 0
-    if suma > 100:
-        descuento = suma * 0.10
-    elif suma > 50:
-        descuento = suma * 0.05
+    if suma > UMBRAL_GRANDE:
+        descuento = suma * DESCUENTO_GRANDE
+    elif suma > UMBRAL_PEQUENO:
+        descuento = suma * DESCUENTO_PEQUENO
 
-    iva = (suma - descuento) * 0.21
+    iva = (suma - descuento) * IVA
+    # -------------------------
+    
     total = suma - descuento + iva
 
     print("Subtotal: " + str(round(suma, 2)))
