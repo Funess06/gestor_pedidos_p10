@@ -1,13 +1,12 @@
 from clientes import clientes
 from utilidades import pedir_numero
 
-# --- CONSTANTES AÑADIDAS (Refactorización 1) ---
+# --- CONSTANTES ---
 IVA = 0.21
 DESCUENTO_GRANDE = 0.10
 DESCUENTO_PEQUENO = 0.05
 UMBRAL_GRANDE = 100
 UMBRAL_PEQUENO = 50
-# -----------------------------------------------
 
 pedidos = []
 
@@ -73,6 +72,31 @@ def nuevo_pedido():
     print("Pedido creado")
 
 
+# --- NUEVA FUNCIÓN EXTRAÍDA (Refactorización 2) ---
+def calcular_totales_pedido(lineas):
+    """Calcula el subtotal, descuento, iva y total a partir de unas líneas de pedido."""
+    suma = 0
+    for linea in lineas:
+        suma = suma + linea["cantidad"] * linea["precio"]
+
+    descuento = 0
+    if suma > UMBRAL_GRANDE:
+        descuento = suma * DESCUENTO_GRANDE
+    elif suma > UMBRAL_PEQUENO:
+        descuento = suma * DESCUENTO_PEQUENO
+
+    iva = (suma - descuento) * IVA
+    total = suma - descuento + iva
+
+    return {
+        "subtotal": suma,
+        "descuento": descuento,
+        "iva": iva,
+        "total": total
+    }
+# --------------------------------------------------
+
+
 def ver_pedidos():
     print("\nLISTADO DE PEDIDOS")
     if len(pedidos) == 0:
@@ -80,18 +104,10 @@ def ver_pedidos():
     else:
         pos = 0
         for p in pedidos:
-            total = 0
-            for l in p["lineas"]:
-                total = total + l["cantidad"] * l["precio"]
+            # Usamos la función extraída
+            totales = calcular_totales_pedido(p["lineas"])
             
-            # --- USO DE CONSTANTES ---
-            if total > UMBRAL_GRANDE:
-                total = total - total * DESCUENTO_GRANDE
-            elif total > UMBRAL_PEQUENO:
-                total = total - total * DESCUENTO_PEQUENO
-            # -------------------------
-            
-            print(str(pos + 1) + ". Cliente: " + p["cliente"]["nombre"] + " | Estado: " + p["estado"] + " | Total: " + str(round(total, 2)) + " €")
+            print(str(pos + 1) + ". Cliente: " + p["cliente"]["nombre"] + " | Estado: " + p["estado"] + " | Total: " + str(round(totales["total"], 2)) + " €")
             pos = pos + 1
 
 
@@ -106,26 +122,14 @@ def calcular_total_desde_menu():
         return
 
     p = pedidos[n - 1]
-    suma = 0
-    for linea in p["lineas"]:
-        suma = suma + linea["cantidad"] * linea["precio"]
-
-    # --- USO DE CONSTANTES ---
-    descuento = 0
-    if suma > UMBRAL_GRANDE:
-        descuento = suma * DESCUENTO_GRANDE
-    elif suma > UMBRAL_PEQUENO:
-        descuento = suma * DESCUENTO_PEQUENO
-
-    iva = (suma - descuento) * IVA
-    # -------------------------
     
-    total = suma - descuento + iva
+    # Usamos la función extraída
+    totales = calcular_totales_pedido(p["lineas"])
 
-    print("Subtotal: " + str(round(suma, 2)))
-    print("Descuento: " + str(round(descuento, 2)))
-    print("IVA: " + str(round(iva, 2)))
-    print("TOTAL: " + str(round(total, 2)))
+    print("Subtotal: " + str(round(totales["subtotal"], 2)))
+    print("Descuento: " + str(round(totales["descuento"], 2)))
+    print("IVA: " + str(round(totales["iva"], 2)))
+    print("TOTAL: " + str(round(totales["total"], 2)))
 
 
 def cambiar_estado_pedido():
