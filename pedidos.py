@@ -11,6 +11,10 @@ UMBRAL_PEQUENO = 50
 pedidos = []
 
 def menu_pedidos():
+    """
+    Muestra el menú principal de gestión de pedidos.
+    Permite al usuario navegar entre las opciones de crear, listar y calcular totales.
+    """
     fin = False
     while fin == False:
         print("\n--- PEDIDOS ---")
@@ -33,6 +37,10 @@ def menu_pedidos():
 
 
 def nuevo_pedido():
+    """
+    Inicia el flujo para registrar un nuevo pedido en el sistema.
+    Asocia el pedido a un cliente existente y permite añadir múltiples líneas de productos.
+    """
     print("\nCREAR PEDIDO")
     if len(clientes) == 0:
         print("Primero debes crear un cliente")
@@ -74,7 +82,15 @@ def nuevo_pedido():
 
 # --- NUEVA FUNCIÓN EXTRAÍDA (Refactorización 2) ---
 def calcular_totales_pedido(lineas):
-    """Calcula el subtotal, descuento, iva y total a partir de unas líneas de pedido."""
+    """
+    Calcula el desglose económico de un pedido.
+    
+    Args:
+        lineas (list): Lista de diccionarios con los productos, cantidades y precios.
+        
+    Returns:
+        dict: Diccionario que contiene el subtotal, descuento, iva y total calculado.
+    """
     suma = 0
     for linea in lineas:
         suma = suma + linea["cantidad"] * linea["precio"]
@@ -98,6 +114,10 @@ def calcular_totales_pedido(lineas):
 
 
 def ver_pedidos():
+    """
+    Imprime por consola un listado de todos los pedidos registrados.
+    Muestra el nombre del cliente, el estado del pedido y el total a pagar.
+    """
     print("\nLISTADO DE PEDIDOS")
     if len(pedidos) == 0:
         print("No hay pedidos")
@@ -136,3 +156,20 @@ def cambiar_estado_pedido():
     # Función sin usar, pensada para detectar código muerto o incompleto
     x = input("Nuevo estado: ")
     return x
+
+
+# --- CLASES PARA DOCUMENTACIÓN (Ejercicio 8) ---
+class ClienteApp:
+    """
+    Representa a un cliente dentro de la aplicación.
+    Almacena datos básicos como el nombre, teléfono y correo electrónico.
+    """
+    pass
+
+class PedidoApp:
+    """
+    Define la estructura de un pedido en el sistema.
+    Agrupa al cliente asociado, las líneas de compra y el estado actual (pendiente, completado).
+    """
+    pass
+# -----------------------------------------------
