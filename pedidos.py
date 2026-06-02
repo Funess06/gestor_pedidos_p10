@@ -126,7 +126,7 @@ def ver_pedidos():
         for p in pedidos:
             # Usamos la función extraída
             totales = calcular_totales_pedido(p["lineas"])
-            
+
             print(str(pos + 1) + ". Cliente: " + p["cliente"]["nombre"] + " | Estado: " + p["estado"] + " | Total: " + str(round(totales["total"], 2)) + " €")
             pos = pos + 1
 
@@ -142,7 +142,7 @@ def calcular_total_desde_menu():
         return
 
     p = pedidos[n - 1]
-    
+
     # Usamos la función extraída
     totales = calcular_totales_pedido(p["lineas"])
 

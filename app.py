@@ -1,5 +1,5 @@
-from pedidos import menu_pedidos
 from clientes import menu_clientes
+from pedidos import menu_pedidos
 from utilidades import mostrar_titulo
 
 

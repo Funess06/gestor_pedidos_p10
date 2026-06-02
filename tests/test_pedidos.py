@@ -1,5 +1,6 @@
 from pedidos import calcular_totales_pedido
 
+
 def test_calcular_totales_sin_descuento():
     # Preparamos unos datos falsos (1 producto de 10€)
     lineas_prueba = [{"producto": "Ratón", "cantidad": 1, "precio": 10.0}]
